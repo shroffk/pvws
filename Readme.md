@@ -24,7 +24,7 @@ Building
 Running under Tomcat
 --------------------
 
-Set the following environment variables, for example in `$CATALINA_HOME/bin/setenv.sh`:
+Set the following environment variables, for example in `$CATALINA_HOME/bin/setenv.sh` or `tomcat.conf`, depending on the version and installation details:
 
  * `EPICS_CA_ADDR_LIST`: CA address list.
  * `EPICS_CA_MAX_ARRAY_BYTES`: CA array size.
@@ -32,7 +32,9 @@ Set the following environment variables, for example in `$CATALINA_HOME/bin/sete
  * `PV_ARRAY_THROTTLE_MS`: .. for arrays (default: 10000).
  * `PV_WRITE_SUPPORT`: Set to `true` to enable writing (default: false).
  
-Place `pvws.war` in `$CATALINA_HOME/webapps`
+Place `pvws.war` in `$CATALINA_HOME/webapps`.
+You can check the tomcat log for the effective values
+since they will be logged when the context starts up.
 
 When enabling write access, actual write access is still controlled
 on a per-PV basis by Channel Access or PV Access security,

@@ -78,17 +78,11 @@ class PVWS
             if (value === undefined)
                 value = { pv: jm.pv, readonly: true };
             
-            //Only way found to show PV as disconnected
-            if(jm.value =="NaN")
-                this.close();
-            else
-            {
-                // Update cached value with received changes
-                Object.assign(value, jm);
-                this.values[jm.pv] = value;
-                // console.log("Update for PV " + jm.pv + ": " + JSON.stringify(value));
-                this.message_handler(value);
-            }
+            // Update cached value with received changes
+            Object.assign(value, jm);
+            this.values[jm.pv] = value;
+            // console.log("Update for PV " + jm.pv + ": " + JSON.stringify(value));
+            this.message_handler(value);
         }
         else
             this.message_handler(jm);
@@ -134,7 +128,7 @@ class PVWS
         this.socket.send(JSON.stringify({ type: "subscribe", pvs: pvs }));
     }
 
-    /** Subscribe to one or more PVs
+    /** Un-Subscribe from one or more PVs
      *  @param pvs PV name or array of PV names
      */
     clear(pvs)
@@ -143,6 +137,11 @@ class PVWS
             pvs = [ pvs ];
         // TODO Forget PVs so we don't re-subscribe after close/re-open
         this.socket.send(JSON.stringify({ type: "clear", pvs: pvs }));
+        
+        // Remove entry for cleared PVs from this.values
+        let pv;
+        for (pv of pvs)
+            delete this.values[pv];
     }
     
     /** Request list of PVs */
